@@ -1,5 +1,5 @@
 const express = require("express");
-
+const auth = require("../../middlewares/auth.js");
 const router = express.Router();
 const { createNewUser, authenticateUser } = require("./user.controller");
 //SignIn
@@ -46,6 +46,13 @@ router.post("/signup", async (req, res) => {
   } catch (error) {
     res.status(400).send(error.message);
   }
+});
+
+//protected Route
+router.get("/private_data", auth, (req, res) => {
+  res
+    .status(200)
+    .send(`You're currently in the territory of ${req.currentUser.email}`);
 });
 
 module.exports = router;
