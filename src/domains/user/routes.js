@@ -2,6 +2,9 @@ const express = require("express");
 const auth = require("../../middlewares/auth.js");
 const router = express.Router();
 const { createNewUser, authenticateUser } = require("./user.controller");
+const {
+  sendVerificationOTPEmail,
+} = require("../email_verification/emailverification.controller.js");
 //SignIn
 router.post("/", async (req, res) => {
   try {
@@ -41,6 +44,7 @@ router.post("/signup", async (req, res) => {
         email,
         password,
       });
+      await sendVerificationOTPEmail(email);
       res.status(200).json(newUser);
     }
   } catch (error) {
